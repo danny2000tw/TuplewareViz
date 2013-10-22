@@ -1,4 +1,6 @@
 var express = require('express');
+var exec = require('child_process').exec,
+    child;
 
 // Set varable for library call
 var app = express();
@@ -19,3 +21,12 @@ app.get('/', function(req,res){
 
 app.listen(8080);
 console.log('Listen on port 8080');
+
+child = exec('cat view/data.tsv',
+	  function (error, stdout, stderr) {
+	    console.log('stdout: ' + stdout);
+	    console.log('stderr: ' + stderr);
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+	    }
+	});
