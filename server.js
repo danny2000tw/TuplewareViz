@@ -1,6 +1,8 @@
 var express = require('express');
 var exec = require('child_process').exec,
     child;
+var fs = require('fs');
+var http = require('http');
 
 // Set varable for library call
 var app = express();
@@ -20,11 +22,22 @@ app.get('/', function(req,res){
 	res.render('index.html');
 });
 
+app.post('/data', function(req,res){
+	var code = req.body.code;
+	fs.writeFile("data.tsv", code, function(err) {
+	    if(err) {
+	        console.log(err);
+	    } else {
+	        console.log("The file was saved!");
+	    }
+	});
+});
+
 
 app.get('/LinearRegression', function(req, res){
-	
+
 	// return a ChildProcess object
-	child = exec('cat ./public/data/data.tsv',
+	child = exec('cat data.tsv',
 	  function (error, stdout, stderr) {
 	    console.log('stdout: ' + stdout);
 	    console.log('stderr: ' + stderr);

@@ -9,7 +9,9 @@ window.addEventListener('load', function(){
 
 
 function execLinearRegression() {
-	
+	var code = $('textarea#code').val();
+	$.post( "/data", {code : code}, function( data ) {
+	});
 	var req = new XMLHttpRequest();
 	req.open('GET', '/LinearRegression', true);
 	req.addEventListener('load', function(){
