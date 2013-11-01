@@ -26,11 +26,13 @@ app.post('/data', function(req,res){
 	var code = req.body.code;
 	fs.writeFile("data.tsv", code, function(err) {
 	    if(err) {
-	        console.log(err);
+	        console.log(err);    
 	    } else {
 	        console.log("The file was saved!");
 	    }
 	});
+	
+	res.send();
 });
 
 

@@ -3,29 +3,33 @@
 window.addEventListener('load', function(){
 	
 	$("#LR").on('click', function() {execLinearRegression()} );
-	
+
 
 }, false);
 
 
 function execLinearRegression() {
-	var code = $('textarea#code').val();
+	//var code = $('textarea#code').val();
+	var code = editor.getValue();
+	//console.log(code);
 	$.post( "/data", {code : code}, function( data ) {
+		var req = new XMLHttpRequest();
+		req.open('GET', '/LinearRegression', true);
+		req.addEventListener('load', function(){
+			
+			if(req.status == 200)
+			{
+				var content = req.responseText;
+				// reverse stingify function 
+				renderLinearRegression(JSON.parse(content));
+			}
+			
+		}, false); 
+		
+		req.send(null);
 	});
-	var req = new XMLHttpRequest();
-	req.open('GET', '/LinearRegression', true);
-	req.addEventListener('load', function(){
-		
-		if(req.status == 200)
-		{
-			var content = req.responseText;
-			// reverse stingify function 
-			renderLinearRegression(JSON.parse(content));
-		}
-		
-	}, false); 
 	
-	req.send(null);
+	
 	
 }
 

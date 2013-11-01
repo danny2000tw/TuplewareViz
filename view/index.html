@@ -17,17 +17,13 @@
 
 <body>
 	<h1>Tupleware Visualization</h1>
-	<textarea id="code" rows="4" cols="50">
-		//Write your C++ code here
-		//
-		// 
-	</textarea>
-	<script> 
+	<textarea id="code" rows="4" cols="50"></textarea>
+	<script>
 		var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
 	        lineNumbers: true,
 	        matchBrackets: true,
 	        mode: "text/x-c++src"
-	      });
+	     });	
 	</script>
 	<input id="LR" value="Line Plot" type="button" />
 	<div id="canvas"></div>
