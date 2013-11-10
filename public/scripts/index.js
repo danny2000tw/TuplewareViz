@@ -21,7 +21,16 @@ function execLinearRegression() {
 			{
 				var content = req.responseText;
 				// reverse stingify function 
-				renderLinearRegression(JSON.parse(content));
+				
+				var res = JSON.parse(content).split(",");
+				console.log(res);
+				
+				w0 = parseFloat(res[0]);
+				w1 = parseFloat(res[1]);
+				w2 = parseFloat(res[2]);
+				
+				renderLinearRegression(generateLine(w0, w1, w2));
+				//renderLinearRegression(JSON.parse(content));
 			}
 			
 		}, false); 
@@ -33,6 +42,30 @@ function execLinearRegression() {
 	
 }
 
+
+function generateLine(w0, w1, w2) {
+	
+	var data = [];
+	var tmp = {};
+	for( var x1 = -50 ; x1 <= 50 ; x1 = x1+0.1)
+	{
+		console.log(x1);
+		x2 = (-w0 - w1*x1)/w2; 	
+		data.push(createPoint(x1, x2));	
+	}
+	
+	return data;
+}
+
+
+function createPoint(x1, x2) {
+	var tmp = {};
+	tmp.date = x1;
+	tmp.close = x2;
+	return tmp; 
+}
+
+
 function renderLinearRegression(result) {
 
 	var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -41,7 +74,12 @@ function renderLinearRegression(result) {
 
 	var parseDate = d3.time.format("%d-%b-%y").parse;
 	
-	var x = d3.time.scale()
+	/*
+var x = d3.time.scale()
+	    .range([0, width]);
+*/
+	
+	var x = d3.scale.linear()
 	    .range([0, width]);
 	
 	var y = d3.scale.linear()
@@ -55,24 +93,36 @@ function renderLinearRegression(result) {
 	    .scale(y)
 	    .orient("left");
 	
+	var area = d3.svg.area()
+	    .x(function(d) { return x(d.date); })
+	    .y0(height)
+	    .y1(function(d) { return y(d.close); });
+	
+	var areaUp = d3.svg.area()
+	    .x(function(d) { return x(d.date); })
+	    .y0(0)
+	    .y1(function(d) { return y(d.close); });
+	    
 	var line = d3.svg.line()
 	    .x(function(d) { return x(d.date); })
 	    .y(function(d) { return y(d.close); });
-	
+	    
 	var svg = d3.select("body").append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	  .append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
-	var data = [];
-	d3.tsv.parse(result, function(d) {
+	var data = result;
+	/*
+d3.tsv.parse(result, function(d) {
 		d.date = parseDate(d.date);
 		d.close = +d.close;
 		data.push(d);
 	});
+*/
 		
-	//console.log(data);
+	console.log(data);
 	x.domain(d3.extent(data, function(d) { return d.date; }));
 	y.domain(d3.extent(data, function(d) { return d.close; }));
 	
@@ -92,8 +142,22 @@ function renderLinearRegression(result) {
 	  .text("Price ($)");
 	
 	svg.append("path")
+        .datum(data)
+        .attr("class", "area")
+        .attr("d", area);
+        
+    svg.append("path")
+        .datum(data)
+        .attr("class", "areaUp")
+        .attr("d", areaUp);   
+         
+	svg.append("path")
 	  .datum(data)
 	  .attr("class", "line")
 	  .attr("d", line);
+	  
+
+     
+        
 			
 }
