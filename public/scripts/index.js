@@ -3,9 +3,27 @@
 window.addEventListener('load', function(){
 	
 	$("#LR").on('click', function() {execLinearRegression()} );
-
+	$("#scp").on('click', function() {scpp()} );
 
 }, false);
+
+
+function scpp() {
+	
+	var req = new XMLHttpRequest();
+	req.open('GET', '/scp', true);
+	req.addEventListener('load', function(){
+	
+		if(req.status == 200)
+		{
+			console.log("scp finished");
+		}
+	
+	}
+	
+	
+}
+
 
 
 function execLinearRegression() {

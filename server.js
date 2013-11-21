@@ -52,6 +52,12 @@ app.get('/LinearRegression', function(req, res){
 	
 });
 
+app.get('/LinearRegression', function(req, res){
+
+	console.log("Hi");
+	res.send();
+});
+
 
 app.listen(8080);
 console.log('Listen on port 8080');
