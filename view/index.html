@@ -29,7 +29,11 @@
 	<div id="canvas"></div>
 	<span id="test"></span>
 	
-	<input id="scp" value="upload Data" type="button" />
+	<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="upload-file">
+    <input type="submit" value="Upload">
+    </form>
+	
 	
 </body>
 

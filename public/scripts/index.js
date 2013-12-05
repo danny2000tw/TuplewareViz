@@ -10,17 +10,19 @@ window.addEventListener('load', function(){
 
 function scpp() {
 	
+	console.log("btn clicked");
 	var req = new XMLHttpRequest();
 	req.open('GET', '/scp', true);
+	console.log("call server");
 	req.addEventListener('load', function(){
-	
 		if(req.status == 200)
 		{
 			console.log("scp finished");
 		}
 	
-	}
+	}, false);
 	
+	req.send(null);
 	
 }
 
