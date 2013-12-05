@@ -34,17 +34,18 @@ http.createServer(function (req, res) {
               //console.log(chunk.toString());
             });
             var form = new formidable.IncomingForm();
+            console.log(req);
             form.parse(req, function(err,fields, files) {
                console.log('in if condition'+sys.inspect({fields: fields, files: files}));
                var targetPath = path.resolve(files.upload.name);
                var pemPath = path.resolve(files.pem.name);
-               var scpCommand = 'scp -i ' + files.pem.name + ' ' + files.upload.name + ' ' + fields.location + ':' + fields.destination;
-               var sshCommand = 'ssh -i ' + files.pem.name + ' ' + fields.location + ' ' + '"cat ' + fields.destination + files.upload.name + ' > ' + fields.destination +  '123' + files.upload.name + '"';
+               var scpCommand = 'scp -o StrictHostKeyChecking=no -i ' + files.pem.name + ' ' + files.upload.name + ' ' + fields.location + ':' + fields.destination;
+               var sshCommand = 'ssh -o StrictHostKeyChecking=no -i ' + files.pem.name + ' ' + fields.location + ' ' + '"cat ' + fields.destination + files.upload.name + ' > ' + fields.destination +  '123' + files.upload.name + '"';
                console.log(scpCommand);
                console.log(sshCommand);
                fs.rename(files.pem.path, pemPath, function(err){
                     if (err) throw err;
-                    // Change the permission 
+                    // Change the file permission 
                     fs.chmod(pemPath, '600');
                     
                    fs.rename(files.upload.path, targetPath, function(err) {

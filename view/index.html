@@ -25,15 +25,25 @@
 	        mode: "text/x-c++src"
 	     });	
 	</script>
-	<input id="LR" value="Line Plot" type="button" />
+	<input id="LR" value="Visualize" type="button" />
 	<div id="canvas"></div>
 	<span id="test"></span>
 	
-	<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="upload-file">
-    <input type="submit" value="Upload">
+	<!-- TupleWare Upload form --> 
+	<h1>TupleWare File Uploader</h1>
+	<form id="uploadForm" enctype="multipart/form-data">
+	Location Of the Server: 
+	<input type="text" name="location" /><br />
+	Destination:
+	<input type="text" name="destination" /><br />
+	File:
+	<input type="file" name="upload" multiple="multiple"><br>
+	Pem
+	<input type="file" name="pem" multiple="multiple"><br>
+	<input type="submit" />
     </form>
 	
+	<span id="uploadmsg"></span>
 	
 </body>
 

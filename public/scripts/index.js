@@ -4,26 +4,36 @@ window.addEventListener('load', function(){
 	
 	$("#LR").on('click', function() {execLinearRegression()} );
 	$("#scp").on('click', function() {uploadFileToEC2()} );
-
+	$('#uploadForm').on('submit', uploadFileToEC2);
+	
+	
+	
 }, false);
 
 
-function uploadFileToEC2() {
+function uploadFileToEC2(e) {
 	
-	console.log("btn clicked");
+	e.preventDefault();
+	
+	// send it to the server 
 	var req = new XMLHttpRequest();
-	req.open('GET', '/uploadFileToEC2', true);
+	var fd = new FormData(document.getElementById('uploadForm'));
+	console.log(fd);
+	
+	req.open('POST', '/uploadFileToEC2', true);
 	console.log("call server");
-	req.addEventListener('load', function(){
+	req.addEventListener('load', function(e){
 		if(req.status == 200)
 		{
-			console.log("scp finished");
+			$('#uploadmsg').html('<h1>Upload finished!</h1>');
+			//console.log("upload finished!");
 		}
 	
-	}, false);
+	} , false);
 	
-	req.send(null);
+	req.send(fd);
 	
+	$('#uploadmsg').html('<h1>Uploading files to EC2.....</h1>');	
 }
 
 
@@ -93,12 +103,7 @@ function renderLinearRegression(result) {
     height = 500 - margin.top - margin.bottom;
 
 	var parseDate = d3.time.format("%d-%b-%y").parse;
-	
-	/*
-var x = d3.time.scale()
-	    .range([0, width]);
-*/
-	
+		
 	var x = d3.scale.linear()
 	    .range([0, width]);
 	
@@ -134,13 +139,6 @@ var x = d3.time.scale()
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
 	var data = result;
-	/*
-d3.tsv.parse(result, function(d) {
-		d.date = parseDate(d.date);
-		d.close = +d.close;
-		data.push(d);
-	});
-*/
 		
 	console.log(data);
 	x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -174,10 +172,5 @@ d3.tsv.parse(result, function(d) {
 	svg.append("path")
 	  .datum(data)
 	  .attr("class", "line")
-	  .attr("d", line);
-	  
-
-     
-        
-			
+	  .attr("d", line);		
 }

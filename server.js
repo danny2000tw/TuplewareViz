@@ -4,10 +4,11 @@ var exec = require('child_process').exec,
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 var http = require('http');
-
 var url = require("url");
 var multipart = require("multipart");
 var sys = require("sys");
+var path = require('path');
+//var formidable = require('formidable');
 
 
 // Set varable for library call
@@ -58,32 +59,61 @@ app.get('/LinearRegression', function(req, res){
 	
 });
 
-app.get('/uploadFileToEC2', function(req, res){
-
-	console.log("Hi");
+app.post('/uploadFileToEC2', function(req, res){
 	
-	scpHandler = spawn('scp',['ccwang@ssh.cs.brown.edu:/home/ccwang', 'fail.jpg']);
-	
-	scpHandler.stdout.on('data', function(data){
-			console.log("test");
-            console.log(data);
-            scpHandler.stdin.write('password');
-            scpHandler.stdin.write('String.fromCharCode(13)');
+	req.on('data', function(chunk) {
+      	console.log("Received body data:");
+      	//console.log(chunk.toString());
     });
-			
-	res.send();
-});
-
-
-app.post('/upload', function(req, res){
+    
+	console.log("Upload to EC2: Started");	
+	console.log(req.body);
+	console.log(req.files);
 	
-	console.log('upload');
-	upload_file(req, res);
+	var fields = req.body;
+	var files = req.files; 
+		
+	var targetPath = path.resolve(files.upload.name);
+	var pemPath = path.resolve(files.pem.name);
+	var scpCommand = 'scp -o StrictHostKeyChecking=no -i ' + files.pem.name + ' ' + files.upload.name + ' ' + fields.location + ':' + fields.destination;
+	var sshCommand = 'ssh -o StrictHostKeyChecking=no -i ' + files.pem.name + ' ' + fields.location + ' ' + '"cat ' + fields.destination + files.upload.name + ' > ' + fields.destination +  '123' + files.upload.name + '"';
+	console.log(scpCommand);
+	console.log(sshCommand);
 	
+	fs.rename(files.pem.path, pemPath, function(err){
+    	if (err) throw err;
+        // Change the file permission 
+        fs.chmod(pemPath, '600');
+            
+		fs.rename(files.upload.path, targetPath, function(err) {
+			if (err) throw err;
+			console.log("Upload completed!");
+			console.log('It\'s saved!');
+			child = exec(scpCommand, function (error, stdout, stderr) {
+			    console.log('stdout: ' + stdout);
+			    console.log('stderr: ' + stderr);
+			    
+			    if (error !== null) {
+			      console.log('exec error: ' + error);
+			    }
+				
+				child = exec(sshCommand, function (error, stdout, stderr) {
+				    console.log('stdout: ' + stdout);
+				    console.log('stderr: ' + stderr);
+				    if (error !== null) {
+				      console.log('exec error: ' + error);
+				    }
+				    
+				    res.end();  
+				    							
+				});	    
+			});
+	     });
+	       
+     });
+     
 });
 
 
 app.listen(8080);
 console.log('Listen on port 8080');
-
-
