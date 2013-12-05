@@ -40,7 +40,6 @@ http.createServer(function (req, res) {
                
                fs.rename(files.upload.path, targetPath, function(err) {
 		            if (err) throw err;
-		            console.log("Upload completed!");
 		            console.log('It\'s saved!');
                     child = exec('scp -i ccwang-ds.pem GradientDescent.txt ubuntu@ec2-54-204-71-56.compute-1.amazonaws.com:/home/ubuntu/test/',
 						  function (error, stdout, stderr) {
