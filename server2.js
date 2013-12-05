@@ -39,11 +39,14 @@ http.createServer(function (req, res) {
                var targetPath = path.resolve(files.upload.name);
                var pemPath = path.resolve(files.pem.name);
                var scpCommand = 'scp -i ' + files.pem.name + ' ' + files.upload.name + ' ' + fields.location + ':' + fields.destination;
-               var sshCommand = 'ssh -i ' + files.pem.name + ' ' + fields.location + ' ' + '"cat ' + fields.destination + files.upload.name + ' > ' + fields.destination + files.upload.name + '"';
+               var sshCommand = 'ssh -i ' + files.pem.name + ' ' + fields.location + ' ' + '"cat ' + fields.destination + files.upload.name + ' > ' + fields.destination +  '123' + files.upload.name + '"';
                console.log(scpCommand);
                console.log(sshCommand);
                fs.rename(files.pem.path, pemPath, function(err){
                     if (err) throw err;
+                    // Change the permission 
+                    fs.chmod(pemPath, '600');
+                    
                    fs.rename(files.upload.path, targetPath, function(err) {
     		            if (err) throw err;
     		            console.log("Upload completed!");
@@ -68,35 +71,7 @@ http.createServer(function (req, res) {
     					  });
     		       });
               });
->>>>>>> b7cee071f8b2d974182d3d67471b3ea82d93ed23
                            
-              /*
- fs.writeFile(files.upload.name, files.upload._writeStream ,'utf8', function (err) {
-                      //console.log(files.upload);
-                      if (err) throw err;
-                      console.log('It\'s saved!');
-                      child = exec('scp -i ccwang-ds.pem GradientDescent.txt ubuntu@ec2-54-204-71-56.compute-1.amazonaws.com:/home/ubuntu/test/',
-						  function (error, stdout, stderr) {
-						    console.log('stdout: ' + stdout);
-						    console.log('stderr: ' + stderr);
-						    if (error !== null) {
-						      console.log('exec error: ' + error);
-						    }
-							
-							child = exec('ssh -i ccwang-ds.pem ubuntu@ec2-54-204-71-56.compute-1.amazonaws.com  "cat ~/test/GradientDescent.txt > ~/test/12345.txt"',
-								function (error, stdout, stderr) {
-								    console.log('stdout: ' + stdout);
-								    console.log('stderr: ' + stderr);
-								    if (error !== null) {
-								      console.log('exec error: ' + error);
-								    }							
-							});	    
-						    //res.json(stdout.toString());
-					  });
-                      
-                });
-*/
-
               res.writeHead(200, {'content-type': 'text/plain'});
               res.write('received upload:\n\n');
               res.end();

@@ -3,16 +3,16 @@
 window.addEventListener('load', function(){
 	
 	$("#LR").on('click', function() {execLinearRegression()} );
-	$("#scp").on('click', function() {scpp()} );
+	$("#scp").on('click', function() {uploadFileToEC2()} );
 
 }, false);
 
 
-function scpp() {
+function uploadFileToEC2() {
 	
 	console.log("btn clicked");
 	var req = new XMLHttpRequest();
-	req.open('GET', '/scp', true);
+	req.open('GET', '/uploadFileToEC2', true);
 	console.log("call server");
 	req.addEventListener('load', function(){
 		if(req.status == 200)
