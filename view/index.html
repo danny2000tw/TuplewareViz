@@ -25,7 +25,8 @@
 	        mode: "text/x-c++src"
 	     });	
 	</script>
-	<input id="LR" value="Visualize" type="button" />
+	<!-- For testing -->
+	<!-- <input id="LR" value="Visualize" type="button" /> -->
 	<div id="canvas"></div>
 	<span id="test"></span>
 	
@@ -33,11 +34,13 @@
 	<h1>TupleWare File Uploader</h1>
 	<form id="uploadForm" enctype="multipart/form-data">
 	Location Of the Server: 
-	<input type="text" name="location" /><br />
-	Destination:
-	<input type="text" name="destination" /><br />
+	<input type="text" name="location" value="ubuntu@ec2-54-226-235-32.compute-1.amazonaws.com"/><br />
+	Code destination:
+	<input type="text" name="code_des" value="/home/ubuntu/tupleware/test/ml/"><br />
+	Data destination:
+	<input type="text" name="data_des" value="/home/ubuntu/tupleware/test/ml/TestData/" /><br />
 	File:
-	<input type="file" name="upload" multiple="multiple"><br>
+	<input id="uploadFileName" type="file" name="upload" multiple="multiple"><br>
 	Pem
 	<input type="file" name="pem" multiple="multiple"><br>
 	<input type="submit" />

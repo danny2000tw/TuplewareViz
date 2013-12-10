@@ -15,8 +15,9 @@ body {
 
 .line {
   fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+  /* stroke: steelblue; */
+  stroke: red;
+  stroke-width: 3.5px;
 }
 
 .area {
@@ -25,6 +26,6 @@ body {
 }
 
 .areaUp {
-    fill: mediumaquamarine;
+    fill: #FFCC00;
     stroke-width: 0;
 }
