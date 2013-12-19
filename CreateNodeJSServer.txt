@@ -1,0 +1,19 @@
+Tupleware Visualization Tool
+
+Authors: Mert Terzihan, Chun-Che Wang
+
+Creating a Node.js Server on Amazon EC2 running Tupleware Visualization tool:
+
+1. Create an instance using AMI named Node Image. This image has Git, Node.js and Express.js laready installed in it.
+2. Add port 80 as a rule to security group inbound.
+3. Clone the code from GitHub repository (Current repository is https://github.com/danny2000tw/TuplewareViz.git).
+	command: git clone https://github.com/danny2000tw/TuplewareViz.git
+4. Change directory to TuplewareViz and run command 'npm install' to install all dependencies of the project
+5. Enable IP forwarding and set up forwarding from port 80 to 8080.
+	commands: sudo vim /etc/sysctl.conf and uncomment the line with "net.ipv4.ip_forward"
+			  sudo sysctl -p /etc/sysctl.conf
+			  sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+			  sudo iptables -A INPUT -p tcp -m tcp --sport 80 -j ACCEPT
+			  sudo iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
+6. Run the Node.js server by executing 'node server.js' command.
+7. You can access the tool via public DNS of your EC2 machine.
